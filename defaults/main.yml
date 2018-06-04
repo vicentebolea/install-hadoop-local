@@ -1,0 +1,15 @@
+scratch: /scratch/vicente
+
+storagedir:  "{{ scratch }}/hadoop/storage"
+namedir:     "{{ scratch }}/hadoop/name"
+
+etc_path: /home/vicente/opt/hadoop-2.7.6/etc/hadoop/
+master: ferrari
+target_user: vicente
+
+coresPerNode: 8 
+memoryPerNode: 12000 # MB
+memoryPerNode: 12000 # MB
+mapTaskMemory: 512 # MB
+reduceTaskMemory: 1024 # MB
+java_home: "/opt/java/jdk1.7.0_51"

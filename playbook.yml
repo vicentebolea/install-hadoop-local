@@ -1,0 +1,38 @@
+---
+
+- hosts: master
+  vars_files: [defaults/main.yml]
+  tasks:
+    - name: Copy template files
+      template:
+        src: "{{ item.name }}"
+        dest: "{{ etc_path }}/{{ item.dest }}"
+        mode: 0644
+      with_items:
+        - { name: 'core-site.xml.template', dest: 'core-site.xml' }
+        - { name: 'hdfs-site.xml.template', dest: 'hdfs-site.xml' }
+        - { name: 'yarn-site.xml.template', dest: 'yarn-site.xml' }
+        - { name: 'mapred-site.xml.template', dest: 'mapred-site.xml' }
+        - { name: 'slaves.template', dest: 'slaves' }
+
+    - name: Change Java_HOME
+      lineinfile:
+        dest: "{{ etc_path }}/hadoop-env.sh"
+        regexp: "^export JAVA_HOME="
+        line: "export JAVA_HOME={{ java_home }}"
+        state: present
+
+- hosts: all
+  vars_files: [defaults/main.yml]
+  tasks:
+    - name: Create directories
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: "{{ target_user }}"
+        group: "{{ target_user }}"
+        mode: 0744
+      with_items:
+        - "{{ scratch }}"
+        - "{{ namedir }}"
+        - "{{ storagedir }}"
